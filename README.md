@@ -3,7 +3,7 @@
 ## Introduction
 The actions of your toon when not fighting or resting are controlled with scripts.
 
-PScript is not a normal sequential scripts language. It's more of a definition of a number of tasks that should be performed. A few times per seconds PPather evaluates the scripts to determine which task to complete. Depending on settings within the Task File, the task can change at (almost) any moment.
+PScript is not a normal sequential scripts language. It's more of a definition of a number of tasks that should be performed. A few times per seconds the engine evaluates the scripts to determine which task to complete. Depending on settings within the Task File, the task can change at (almost) any moment.
 
 ## Definitions
 A definition is like a variable in a normal programming languange. It is always preceeded by a $. These variables can only be defined once, and cannot (currently) be redefined.
@@ -96,7 +96,7 @@ Tasks are organized in a tree like structure with parent tasks and child tasks. 
 Tasks read definitions as parameters. What definitions depend on what task it is. The definition can be defined outside the task but will still be used as a parameter. For example $MinLevel can be defined at top level and will then be used by all Pull tasks in the script.
 
 ## Adding a New Task
-To add a new task, you simply need to extend Pather.Tasks.ParserTask (or one of its abstract sub-classes) and implement the desired behavior. The convention is to name your class XxxTask. Depending on the task's complexity you may also need to create an associated Pather.Activities.Activity.
+To add a new task, you simply need to extend TaskEngine.Tasks.ParserTask (or one of its abstract sub-classes) and implement the desired behavior. The convention is to name your class XxxTask. Depending on the task's complexity you may also need to create an associated TaskEngine.Activities.Activity.
 
 The task will automatically be available to psc files. It will be named Xxx, assuming you named the class XxxTask. More precisely, it will be named whatever your class is named with the word "Task" removed from the end, if it is there.
 
@@ -108,13 +108,13 @@ where the value is a comma-separated list of the aliases you would like availabl
 
 ### New Function
 
-To add a new function (like QuestStatus() and NearTo()), create a new method in Pather.Parser.Fcalls. Its signature must be 
+To add a new function (like QuestStatus() and NearTo()), create a new method in TaskEngine.Parser.Fcalls. Its signature must be 
 public static Value FuncName(params Value[] args);
 "FuncName" will be available to call from a psc file.
 
 ### New Predefined Variable
 
-To add a new predefined variable (like $MyLevel and $FreeBagSlots), create a new method in Pather.Parser.PredefinedVars. Its signature must be 
+To add a new predefined variable (like $MyLevel and $FreeBagSlots), create a new method in TaskEngine.Parser.PredefinedVars. Its signature must be 
 public static Value VarName();
 "$VarName" will now be defined in psc files.
 
