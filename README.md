@@ -1,4 +1,4 @@
-# TaskEngine -- A PPather task based BotBase for ZzukBot
+# TaskEngine -- Task based BotBase
 
 ## Introduction
 The actions of your toon when not fighting or resting are controlled with scripts.
