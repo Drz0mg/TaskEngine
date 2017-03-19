@@ -94,3 +94,26 @@ function(parm1, param2, ...)
 Tasks are organized in a tree like structure with parent tasks and child tasks. Some tasks have children (such as Seq and Par) while others do not (such as Hotspot or Vendor). How the children are treated depends totally on the parent task.
 
 Tasks read definitions as parameters. What definitions depend on what task it is. The definition can be defined outside the task but will still be used as a parameter. For example $MinLevel can be defined at top level and will then be used by all Pull tasks in the script.
+
+## Adding a New Task
+To add a new task, you simply need to extend Pather.Tasks.ParserTask (or one of its abstract sub-classes) and implement the desired behavior. The convention is to name your class XxxTask. Depending on the task's complexity you may also need to create an associated Pather.Activities.Activity.
+
+The task will automatically be available to psc files. It will be named Xxx, assuming you named the class XxxTask. More precisely, it will be named whatever your class is named with the word "Task" removed from the end, if it is there.
+
+If you want the available name in psc files to be different from the class name or you want to make aliases for the task (e.g. ParTask can be Par or Parallel), define the following field in your class: 
+public const string ParserKeyword = "...";
+where the value is a comma-separated list of the aliases you would like available for the task.
+
+## Adding a New Parser Function/Predefined Variable
+
+### New Function
+
+To add a new function (like QuestStatus() and NearTo()), create a new method in Pather.Parser.Fcalls. Its signature must be 
+public static Value FuncName(params Value[] args);
+"FuncName" will be available to call from a psc file.
+
+### New Predefined Variable
+
+To add a new predefined variable (like $MyLevel and $FreeBagSlots), create a new method in Pather.Parser.PredefinedVars. Its signature must be 
+public static Value VarName();
+"$VarName" will now be defined in psc files.
