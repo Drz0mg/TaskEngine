@@ -117,3 +117,88 @@ public static Value FuncName(params Value[] args);
 To add a new predefined variable (like $MyLevel and $FreeBagSlots), create a new method in Pather.Parser.PredefinedVars. Its signature must be 
 public static Value VarName();
 "$VarName" will now be defined in psc files.
+
+# Tasks
+
+## DefendTask
+
+### Defend
+
+- Parameters: none
+- Children: none
+- Description: Fights back monsters that attack you, without this task in a script the toon will not fight back monsters that attack.
+
+## HotspotTask
+
+### Hotspots
+
+- Parameters: $Locations, $Order, $UseMount, $HowClose
+- Children: 1
+- Description: Move the toon to the locations defined in $Locations. $Locations must be a array of arrays with 3 elements in each child array. Ex: [[1,2,3], [4,5,6]] The locations refer to in game coordinates ([X,Y,Z]). $Order can control the order in which the hostpots are visited. Setting it to "Order" will make it go to the locations in order. Setting to "Reverse" will make it go to the locations in reverse. If not specified it will be random. You can specify how close to the marked location the bot will run.
+
+- If $UseMount is set to true it will mount up (provided the next location is over 50 yards away)
+- If $HowClose is not set, the default value (3.5) will be used.
+
+Example:
+```
+Hotspots 
+{
+    $Order = "Random"; // The order at which to go through the hotspots
+    $Locations = [[ -4731, 1234, 105], [ -4733, 1461, 96]]]; // Set your hotspot locations here
+    $UseMount = true; // Use a mount to move to the next hotspot if possible
+    $HowClose = 2.5; // Get within 2.5 yards of the next hotspot.
+}
+```
+
+## IfTask
+
+### If
+
+- Parameters: $cond
+- Children: 1
+- Description: This is a task that will activate its children only if $cond evaluates to true. If is finished when its child is finished or the $cond evaulates to false
+
+Example:
+```
+If
+{
+  $cond = $MyClass == "Mage";
+  // If you're a mage, do this...
+}
+```
+
+## ParTask
+
+### Par
+
+- Parameters: $cond (optional)
+- Children: many
+- Description: Prioritized parallel consideration of what child to execute. This task can consider many task at once. It will read the definition $Prio of each child, the lower the value the more important the task is. If there are many task at the same priority it will choose the task that has its goal location closest. 
+
+Example:
+```
+Par
+{
+  Defend { $Prio = 0; }
+  Loot { $Prio = 1; }
+  Danger { $Prio = 2; }
+  // Defend has a higher priority so it will always try to defend itself, but if it would be logical to Loot before carrying on with Defend, it will do so. It will only pull if there's nothing already attacking or if you're looting.
+}
+```
+
+## WhenTask
+
+### When
+
+- Parameters: $cond
+- Children: 1
+- Description: This is a task that will activate its children only if $cond evaluates to true. If is finished when its children are finished.
+
+Example:
+```
+When
+{
+	$cond = ($MyLevel == 30);
+	Log { $Text = "I am now level 30"; }
+}
+```
