@@ -34,7 +34,8 @@ namespace TaskEngine.Tasks
         public const string ParserKeyword = "Hotspots";
         private int currentHotSpotIndex;
         private readonly string order;
-
+        private static Lazy<Random> random = new Lazy<Random>(() => new Random());
+        
         public HotspotTask(NodeTask node)
             : base(node)
         {
@@ -79,7 +80,7 @@ namespace TaskEngine.Tasks
             }
             else
             {
-                this.currentHotSpotIndex = new Random().Next(this.Locations.Count);
+                this.currentHotSpotIndex = random.Value.Next(this.Locations.Count);
             }
 
             return this.Locations[this.currentHotSpotIndex];
